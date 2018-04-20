@@ -35,8 +35,6 @@ window.addEventListener('load', () => {
   if (!!!localStorage.getItem(NODES)) {
     setNodes(mockData)
     saveNodes(getNodes())
-  } else {
-    setNodes(loadNodes())
   }
 
   const handleClick = ({ target: { innerText: type } }) => {
@@ -45,14 +43,19 @@ window.addEventListener('load', () => {
     switch (type) {
       case 'load':
         // load data
+        setNodes(loadNodes())
         break
       case 'save':
         // modify before save
-        const newData = getNodes().map(element => {
-          element.count++
-          return element
-        })
-        saveNodes(newData)
+        const nodes = getNodes()
+        if (nodes) {
+          const newData = nodes.map(element => {
+            element.count++
+            return element
+          })
+          saveNodes(newData)
+        } else
+          alert('getNodes Error, please try again!')
         break
       case 'clear':
         // clear all data in storage
